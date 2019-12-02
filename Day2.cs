@@ -49,18 +49,16 @@ namespace AoC2019
                 var second = codes[instructionPtr + 2];
                 var target = codes[instructionPtr + 3];
 
-                if (cmd == AddCmd)
+                switch (cmd)
                 {
-                    codes[target] = codes[first] + codes[second];
-                }
-                else if (cmd == MultCmd)
-                {
-                    codes[target] = codes[first] * codes[second];
-                }
-                else
-                {
-
-                    return -1;
+                    case AddCmd:
+                        codes[target] = codes[first] + codes[second];
+                        break;
+                    case MultCmd:
+                        codes[target] = codes[first] * codes[second];
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
 
                 instructionPtr = instructionPtr + 4;
