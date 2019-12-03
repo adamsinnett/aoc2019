@@ -10,6 +10,7 @@ namespace AoC2019
         {
             DayOne.getFuel();
             DayTwo.getCodes();
+            Day3.CrossedWires();
 
             System.Console.WriteLine("");
             System.Console.WriteLine("Good so far!");
