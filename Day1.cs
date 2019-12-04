@@ -7,29 +7,9 @@ namespace AoC2019
     class DayOne
     {
         public const string path = @"C:\Users\quand\projects\day1.txt";
-        public static void getFuel()
+        public static void getFuel(string input)
         {
             System.Console.WriteLine("Day One");
-
-            var request = WebRequest.Create(@"https://adventofcode.com/2019/day/1/input");
-            var cookie = new Cookie("session", "")
-            {
-                Domain = @"adventofcode.com"
-            };
-
-            request.TryAddCookie(cookie);
-            var response = request.GetResponse();
-            string input;
-            using (Stream dataStream = response.GetResponseStream())
-            {
-                // Open the stream using a StreamReader for easy access.  
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.  
-                input = reader.ReadToEnd();
-            }
-  
-            // Close the response.  
-            response.Close();
 
             var mass = input.ReadLines()
                 .Select(int.Parse)

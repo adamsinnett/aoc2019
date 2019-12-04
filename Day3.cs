@@ -9,10 +9,9 @@ namespace AoC2019
 {
     class Day3
     {
-        public static void CrossedWires()
+        public static void CrossedWires(string input)
         {
             System.Console.WriteLine("Day Three");
-            var input = getInput();
             var coords = input.ReadLines().Select(s => s.Split(",")).Select(s => FindCoordinates(s));
             var intersections = FindIntersections(coords.First(), coords.Last());
 
@@ -131,32 +130,6 @@ namespace AoC2019
             }
 
             return coordinates;
-        }
-
-        // TODO make abstract
-        private static string getInput()
-        {
-            var request = WebRequest.Create(@"https://adventofcode.com/2019/day/3/input");
-            var cookie = new Cookie("session", "53616c7465645f5f2cce37a173e82fceb957550c8a2b9d5ef7de29ec23d14a58ebad77f8d483d319a263e45fd4bd36c9")
-            {
-                Domain = @"adventofcode.com"
-            };
-
-            request.TryAddCookie(cookie);
-            var response = request.GetResponse();
-            string input;
-            using (Stream dataStream = response.GetResponseStream())
-            {
-                // Open the stream using a StreamReader for easy access.  
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.  
-                input = reader.ReadToEnd();
-            }
-
-            // Close the response.  
-            response.Close();
-
-            return input;
         }
     }
 
