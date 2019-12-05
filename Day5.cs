@@ -100,10 +100,10 @@ namespace AoC2019
             return output;
         }
 
-        private static int getInstValue(int[] memory, int instrPtr, bool isnounParam)
+        private static int getInstValue(int[] memory, int instrPtr, bool isNounParam)
         {
-            int mode = isnounParam ?  (memory[instrPtr]  / 100) % 10 : memory[instrPtr] / 1000;
-            int offset = isnounParam ? 1 : 2;
+            int mode = isNounParam ?  (memory[instrPtr]  / 100) % 10 : memory[instrPtr] / 1000;
+            int offset = isNounParam ? 1 : 2;
             return mode != 0 ? memory[instrPtr + offset] : memory[memory[instrPtr + offset]];
         }
     }
