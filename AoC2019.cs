@@ -13,7 +13,8 @@ namespace AoC2019
             //DayTwo.getCodes(getInput(2));
             //Day3.CrossedWires(getInput(3));
             //Day4.DoDay4(getInput(4));
-            Day5.Execute(getInput(5));
+            //Day5.Execute(getInput(5));
+            Day6.Execute(getInput(6));
 
             System.Console.WriteLine("");
             System.Console.WriteLine("Good so far!");
