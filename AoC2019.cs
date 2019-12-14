@@ -14,8 +14,9 @@ namespace AoC2019
             //Day3.CrossedWires(getInput(3));
             //Day4.DoDay4(getInput(4));
             //Day5.Execute(getInput(5));
-            Day6.Execute(getInput(6));
-
+            //Day6.Execute(getInput(6));
+            Day7.Execute(getInput(7));
+            //Day9.Execute(getInput(9));
             System.Console.WriteLine("");
             System.Console.WriteLine("Good so far!");
         }
@@ -41,6 +42,7 @@ namespace AoC2019
                 StreamReader reader = new StreamReader(dataStream);
                 // Read the content.  
                 input = reader.ReadToEnd();
+                reader.Dispose();
             }
 
             // Close the response.  
