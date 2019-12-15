@@ -1,37 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AoC2019
 {
     class IntCodeComputer
     {
-        private int[] memory;
-        private int instructionPointer = 0;
-        private Queue<int> input;
+        private long[] memory;
+        private long instructionPointer = 0;
+        private long relativeBase = 0;
+        private readonly Queue<long> input;
 
-        internal int output { get; set; } = 0;
-        internal bool halted { get; set; } = false; 
+        internal long Output { get; set; } = 0;
+        internal bool Halted { get; set; } = false;
 
-        public IntCodeComputer(int[] memory, Queue<int> input)
+        internal IntCodeComputer(long[] memory, Queue<long> input)
         {
             this.memory = memory;
             this.input = input;
         }
 
-        public void Compute()
+        internal void Compute()
         {
             while (true)
             {
 
-                var cmd = memory[instructionPointer] % 100;
+                var cmd = GetMemory(instructionPointer) % 100;
                 switch (cmd)
                 {
                     case 1:
                         {
                             var noun = getInstValue(memory, instructionPointer, true);
                             var verb = getInstValue(memory, instructionPointer, false);
-                            memory[memory[instructionPointer + 3]] = noun + verb;
+                            SetMemory(GetMemory(instructionPointer + 3), noun + verb);
                             instructionPointer += 4;
                             break;
                         }
@@ -39,21 +39,22 @@ namespace AoC2019
                         {
                             var noun = getInstValue(memory, instructionPointer, true);
                             var verb = getInstValue(memory, instructionPointer, false);
-                            memory[memory[instructionPointer + 3]] = noun * verb;
+                            SetMemory(GetMemory(instructionPointer + 3), noun * verb);
                             instructionPointer += 4;
                             break;
                         }
 
                     case 3:
                         {
-                            memory[memory[instructionPointer + 1]] = input.Dequeue();
+                            var location = ((GetMemory(instructionPointer) / 100) % 10) == 2 ? relativeBase : 0;
+                            memory[location + memory[instructionPointer + 1]] = input.Dequeue();
                             instructionPointer += 2;
                             break;
                         }
 
                     case 4:
                         {
-                            output = getInstValue(memory, instructionPointer, true);
+                            Output = getInstValue(memory, instructionPointer, true);
                             instructionPointer += 2;
                             return;
                         }
@@ -78,7 +79,7 @@ namespace AoC2019
                         {
                             var noun = getInstValue(memory, instructionPointer, true);
                             var verb = getInstValue(memory, instructionPointer, false);
-                            memory[memory[instructionPointer + 3]] = noun < verb ? 1 : 0;
+                            SetMemory(GetMemory(instructionPointer + 3), (noun < verb ? 1 : 0));
                             instructionPointer += 4;
                             break;
                         }
@@ -87,32 +88,75 @@ namespace AoC2019
                         {
                             var noun = getInstValue(memory, instructionPointer, true);
                             var verb = getInstValue(memory, instructionPointer, false);
-                            memory[memory[instructionPointer + 3]] = noun == verb ? 1 : 0;
+                            SetMemory(GetMemory(instructionPointer + 3),(noun == verb ? 1 : 0));
                             instructionPointer += 4;
                             break;
                         }
-                    case 99: {
-                            halted = true;
+                    case 9:
+                        {
+                            var location = ((GetMemory(instructionPointer) / 100) % 10) == 2 ? relativeBase : 0;
+                            relativeBase += memory[location + memory[instructionPointer + 1]];
+                            instructionPointer += 2;
+                            break;
+
+                        }
+                    case 99:
+                        {
+                            Halted = true;
                             return;
                         }
                     default:
                         {
-                            throw new NotImplementedException();
+                            throw new NotImplementedException(string.Join(",", memory) + " " + instructionPointer);
                         }
                 }
             }
         }
 
-        internal void EnqueueInput(int output)
+        internal void EnqueueInput(long output)
         {
             input.Enqueue(output);
         }
 
-        private static int getInstValue(int[] memory, int instrPtr, bool isNounParam)
+        private long getInstValue(long[] memory, long instrPtr, bool isNounParam)
         {
-            int mode = isNounParam ? (memory[instrPtr] / 100) % 10 : memory[instrPtr] / 1000;
-            int offset = isNounParam ? 1 : 2;
-            return mode != 0 ? memory[instrPtr + offset] : memory[memory[instrPtr + offset]];
+            long mode = isNounParam ? (GetMemory(instrPtr) / 100) % 10 : GetMemory(instrPtr) / 1000;
+            long offset = isNounParam ? 1 : 2;
+            return mode switch
+            {
+                0 => GetMemory(GetMemory(instrPtr + offset)),
+                1 => GetMemory(instrPtr + offset),
+                2 => GetMemory(relativeBase + GetMemory(instrPtr + offset)),
+                _ => throw new NotImplementedException(string.Join(",", memory) + " " + instrPtr)
+            };
+        }
+
+        private long GetMemory(long pointer)
+        {
+            if (pointer > memory.Length - 1)
+            {
+                ResizeMemory(pointer);
+            }
+            return memory[pointer];
+        }
+
+        private void SetMemory(long pointer, long value)
+        {
+            if (pointer > memory.Length -1)
+            {
+                ResizeMemory(pointer);
+            }
+            if (pointer >= 0)
+            {
+                memory[pointer] = value;
+            }
+        }
+
+        private void ResizeMemory(long length)
+        {
+            long[] mem = new long[length+1];
+            memory.CopyTo(mem, 0);
+            memory = mem;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AoC2019
 {
-    public static class Extensions
+    public static class PersonalExtensions
     {
         internal static bool TryAddCookie(this WebRequest webRequest, Cookie cookie)
         {

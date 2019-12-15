@@ -11,7 +11,7 @@ namespace AoC2019
         {
             Console.WriteLine("Day Seven");
 
-            var memory = input.Split(",").Select(int.Parse).ToArray();
+            var memory = input.Split(",").Select(long.Parse).ToArray();
             var phases = Enumerable.Range(0, 5).Permutations().ToList();
             var part1 = RunIntCodeComputersFromPermutations(memory, phases);
             Console.WriteLine("Part 1 = {0}", part1);            
@@ -21,9 +21,9 @@ namespace AoC2019
             Console.WriteLine("Part 2 = {0}", part2);
         }
 
-        private static int RunIntCodeComputersFromPermutations(int[] memory, List<IList<int>> phases)
+        private static long RunIntCodeComputersFromPermutations(long[] memory, List<IList<int>> phases)
         {
-            var maxOutput = 0;
+            var maxOutput = 0L;
             foreach (var phase in phases)
             {
                 IntCodeComputer[] computers = {
@@ -34,22 +34,22 @@ namespace AoC2019
                     new IntCodeComputer(memory, NewQueueOf(phase[4])),
                 };
 
-                var output = 0;
-                while (computers.Where(c => !c.halted).Any()) {
+                var output = 0L;
+                while (computers.Where(c => !c.Halted).Any()) {
                     foreach (var computer in computers)
                     {
-                        if (computer.output == -99)
+                        if (computer.Output == -99)
                         {
                             continue;
                         }
                         computer.EnqueueInput(output);
                         computer.Compute();
-                        output = computer.output;
+                        output = computer.Output;
                     }
                 }
 
 
-                var currentOutput = computers.Last().output;
+                var currentOutput = computers.Last().Output;
                 if (currentOutput > maxOutput)
                 {
                     maxOutput = currentOutput;
@@ -59,9 +59,9 @@ namespace AoC2019
             return maxOutput;
         }
 
-        private static Queue<int> NewQueueOf(int phase)
+        private static Queue<long> NewQueueOf(long phase)
         {
-            var queue = new Queue<int>();
+            var queue = new Queue<long>();
             queue.Enqueue(phase);
             return queue;
         }

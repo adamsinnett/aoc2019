@@ -85,13 +85,13 @@ namespace AoC2019
 
             }
 
-            return links.Count();
+            return links.Count;
         }
 
         private static List<(string, string)> FindEntirePath(string key, Dictionary<string, List<(string, string)>> orbits)
         {
             var paths = orbits.GetValueOrDefault(key, new List<(string, string)>());
-            if (paths == null || paths.Count() == 0)
+            if (paths == null || paths.Count == 0)
             {
                 return new List<(string, string)>();
             }
